@@ -12,7 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - name: Checkout repository
-          uses: actions/checkout@v3
+          uses: actions/checkout@v4
+
+        - name: Get Runner IP Address
+          id: get_ip
+          run: |
+            RUNNER_IP=$(curl -s https://icanhazip.com)
+            echo "RUNNER_IP=$RUNNER_IP" >> $GITHUB_ENV
 
         - name: Setup Terraform
           uses: hashicorp/setup-terraform@v3
@@ -30,5 +36,6 @@ jobs:
          
 
         - name: Terraform apply 
-          run: terraform apply -auto-approve
-
+          run: terraform apply  -auto-approve
+          env: 
+              TF_VAR_runner_ip: ${{ secrets.TF_VAR_MY_IP}}
