@@ -38,4 +38,4 @@ jobs:
         - name: Terraform apply 
           run: terraform apply  -auto-approve
           env: 
-              TF_VAR_runner_ip: ${{ secrets.TF_VAR_MY_IP}}
+              TF_VAR_my_ip: ${{ secrets.TF_VAR_MY_IP}}
