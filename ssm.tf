@@ -9,7 +9,7 @@ resource "aws_ssm_association" "ansible_association" {
     })
 
     PlaybookFile        = "inventory.yml"
-    InstallDependencies = "true"
+    InstallDependencies = "True"
   }
 }
 
