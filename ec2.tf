@@ -93,6 +93,21 @@ resource "aws_iam_role_policy_attachment" "ssm_role_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
+resource "aws_iam_role_policy" "ssm_s3_access" {
+  role = aws_iam_role.ssm_role.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = "s3:GetObject"
+        Resource = "arn:aws:s3:::${aws_s3_bucket.ansible.bucket}/*"
+      }
+    ]
+  })
+}
+
 
 
 resource "aws_iam_instance_profile" "ssm_instance_profile" {
