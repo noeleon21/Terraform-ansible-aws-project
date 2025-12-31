@@ -1,33 +1,32 @@
-- name: Configure EC2 instance
+- name: Install webserver and serve Hello World
   hosts: all
   become: true
-  gather_facts: true   
 
   tasks:
-    - name: Install Nginx on Amazon Linux 3
+    - name: Install nginx
       ansible.builtin.dnf:
         name: nginx
         state: present
-      when:
-        - ansible_os_family == "RedHat"
-        - ansible_distribution == "Amazon"
 
-    - name: Template index file for Amazon Linux
-      ansible.builtin.template:
-        src: index.html.j2
+    - name: Create Hello World page
+      ansible.builtin.copy:
         dest: /usr/share/nginx/html/index.html
+        content: |
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Hello</title>
+          </head>
+          <body>
+            <h1>Hello World</h1>
+          </body>
+          </html>
         owner: nginx
         group: nginx
         mode: '0644'
-      when:
-        - ansible_os_family == "RedHat"
-        - ansible_distribution == "Amazon"
 
-    - name: Enable and start Nginx (Amazon Linux)
+    - name: Enable and start nginx
       ansible.builtin.service:
         name: nginx
-        enabled: yes
         state: started
-      when:
-        - ansible_os_family == "RedHat"
-        - ansible_distribution == "Amazon"
+        enabled: true
