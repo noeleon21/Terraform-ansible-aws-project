@@ -5,8 +5,6 @@ resource "aws_ssm_association" "ansible_association" {
     key = "InstanceIds"
     values = [
       module.ec2_instance["Host"].id,
-      module.ec2_instance["webserver2"].id,
-      module.ec2_instance["WebServer3"].id
     ]
   }
 
