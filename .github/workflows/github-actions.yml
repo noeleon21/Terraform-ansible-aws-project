@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: 
  push:
   branches:
-    - main
+    - dev
 permissions:
   id-token: write
   contents: read
@@ -13,12 +13,6 @@ jobs:
     steps:
         - name: Checkout repository
           uses: actions/checkout@v4
-
-        - name: Get Runner IP Address
-          id: get_ip
-          run: |
-            RUNNER_IP=$(curl -s https://icanhazip.com)
-            echo "RUNNER_IP=$RUNNER_IP" >> $GITHUB_ENV
 
         - name: Setup Terraform
           uses: hashicorp/setup-terraform@v3

@@ -1,0 +1,41 @@
+resource "aws_ssm_association" "ansible_association" {
+  name = "AWS-ApplyAnsiblePlaybooks"
+ 
+    targets {
+        key    = "tag:Stage"
+        values = ["Test"]
+    }
+
+  parameters = {
+    sourceType = ["S3"]
+    sourceInfo = [jsonencode({
+      path = "https://s3.amazonaws.com/${aws_s3_bucket.ansible.bucket}/playbook/"
+    })]
+    installDependencies = true
+    playbookFile = ["inventory.yml"]
+  }
+    
+
+
+}
+
+
+# resource "aws_resourcegroups_group" "ansiblegroup" {
+#   name = "ansible-group"
+
+#   resource_query {
+#     query = <<JSON
+# {
+#   "ResourceTypeFilters": [
+#     "AWS::EC2::Instance"
+#   ],
+#   "TagFilters": [
+#     {
+#       "Key": "Stage",
+#       "Values": ["Test"]
+#     }
+#   ]
+# }
+# JSON
+#   }
+# }
