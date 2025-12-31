@@ -1,5 +1,15 @@
 resource "aws_ssm_association" "ansible_association" {
   name = "AWS-ApplyAnsiblePlaybooks"
+ 
+  targets {
+    key = "InstanceIds"
+    values = [
+      module.ec2_instance["Host"].id,
+      module.ec2_instance["webserver2"].id,
+      module.ec2_instance["WebServer3"].id
+    ]
+  }
+
 
   parameters = {
     SourceType = "S3"
