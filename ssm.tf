@@ -7,7 +7,7 @@ resource "aws_ssm_association" "ansible_association" {
     }
 
   parameters = {
-    sourceType = ["S3"]
+    sourceType = "S3"
     sourceInfo = [jsonencode({
       path = "https://s3.amazonaws.com/${aws_s3_bucket.ansible.bucket}/playbook.zip"
     })]
