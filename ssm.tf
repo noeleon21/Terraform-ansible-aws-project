@@ -18,7 +18,7 @@ resource "aws_ssm_association" "ansible_association" {
       path = "https://s3.amazonaws.com/${aws_s3_bucket.ansible.bucket}/playbook.zip"
     })
 
-    PlaybookFile        = "inventory.yml"
+    PlaybookFile        = "playbook/inventory.yml"
     InstallDependencies = "True"
   }
 }
