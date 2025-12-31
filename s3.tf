@@ -4,9 +4,9 @@ resource "aws_s3_bucket" "ansible" {
 
 resource "aws_s3_object" "playbook" {
     bucket = aws_s3_bucket.ansible.id
-    key    = "playbook.zip"
-    source = "playbook.zip"
-  
+    key    = "playbook.yaml"
+    source = "playbook.yaml"
+
 }
 
 resource "aws_s3_bucket_public_access_block" "ansible_block" {
