@@ -13,10 +13,10 @@ resource "aws_ssm_association" "ansible_association" {
     SourceType = "S3"
 
     SourceInfo = jsonencode({
-      path = "https://s3.amazonaws.com/${aws_s3_bucket.ansible.bucket}/playbook.zip"
+      path = "s3://${aws_s3_bucket.ansible.bucket}/playbook.zip"
     })
 
-    PlaybookFile        = "playbook/inventory.yml"
+    PlaybookFile        = "inventory.yml"
     InstallDependencies = "True"
   }
 }
