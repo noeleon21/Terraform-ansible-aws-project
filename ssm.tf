@@ -1,22 +1,16 @@
 resource "aws_ssm_association" "ansible_association" {
   name = "AWS-ApplyAnsiblePlaybooks"
- 
-    targets {
-        key    = "tag:Stage"
-        values = ["Test"]
-    }
 
   parameters = {
-    sourceType = "S3"
-    sourceInfo = [jsonencode({
-      path = "https://s3.amazonaws.com/${aws_s3_bucket.ansible.bucket}/playbook.zip"
-    })]
-    installDependencies = true
-    playbookFile = "inventory.yml"
+    sourceType = ["S3"]
+    sourceInfo = [
+      jsonencode({
+        path = "https://s3.amazonaws.com/${aws_s3_bucket.ansible.bucket}/playbook.zip"
+      })
+    ]
+    installDependencies = ["true"]
+    playbookFile       = ["inventory.yml"]
   }
-    
-
-
 }
 
 
