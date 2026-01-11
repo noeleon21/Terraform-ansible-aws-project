@@ -22,14 +22,25 @@ jobs:
         - name: Configure AWS Credentials (OIDC)
           uses: aws-actions/configure-aws-credentials@v4
           with:
-            role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+            role-to-assume: ${{ vars.AWS_ROLE_TO_ASSUME }}
             aws-region: us-east-1
 
         - name: Terraform Init
           run: terraform init 
+
+        - name: Run Checkov
+          uses: bridgecrewio/checkov-action@master
+          with:
+              directory: .
+        
+        - name: Run Trivy
+          uses: aquasecurity/trivy-action@0.33.1
+          with:
+              scan-type: fs
+              severity: HIGH,CRITICAL
          
 
-        - name: Terraform destroy
-          run: terraform destroy -auto-approve    
+        - name: Terraform Apply
+          run: terraform apply -auto-approve
           env: 
               TF_VAR_my_ip: ${{ secrets.TF_VAR_MY_IP}}
