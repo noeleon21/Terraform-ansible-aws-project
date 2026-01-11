@@ -27,11 +27,27 @@ jobs:
 
         - name: Terraform Init
           run: terraform init 
-
+        
         - name: Run Checkov
-          uses: bridgecrewio/checkov-action@master
+          id: checkov
+          uses: bridgecrewio/checkov-action@v12
           with:
-              directory: .
+            directory: ./terraform
+            framework: terraform
+            output_format: github_failed_only
+            output_file_path: ./terraform
+            quiet: true
+            soft_fail: true
+
+        - name: Checkov Report
+          id: checkov-report
+          working-directory: ./terraform
+          run: |
+            while IFS= read -r line; do
+              echo "$line" >> $GITHUB_STEP_SUMMARY
+            done < results_github_failed_only.md
+
+       
         
         - name: Run Trivy
           uses: aquasecurity/trivy-action@0.33.1

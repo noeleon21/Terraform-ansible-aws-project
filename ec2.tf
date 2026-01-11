@@ -1,5 +1,6 @@
 module "ec2_instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
+  
 
   for_each = {
     for idx, name in tolist(["Host", "webserver2", "WebServer3"]) : name => idx
@@ -25,7 +26,7 @@ module "ec2_instance" {
 }
 
 module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
+  source =  "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=26c38a66f12e7c6c93"
 
   name = "my-vpc"
   cidr = "10.0.0.0/16"
