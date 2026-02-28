@@ -1,9 +1,9 @@
 name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: 
- push:
-  branches:
-    - dev
+on:
+  push:
+    branches:
+      - dev
 permissions:
   id-token: write
   contents: read
@@ -11,37 +11,41 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     steps:
-        - name: Checkout repository
-          uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-        - name: Setup Terraform
-          uses: hashicorp/setup-terraform@v3
-          with:
-            terraform_version: 1.6.6
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
 
-        - name: Configure AWS Credentials (OIDC)
-          uses: aws-actions/configure-aws-credentials@v4
-          with:
-            role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-            aws-region: us-east-1
+      - name: Configure AWS Credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: us-east-1
 
-        - name: Terraform Init
-          run: terraform init 
-          
-        - name: Run tfsec
-          uses: aquasecurity/tfsec-action@v1.0.0
-          with:
-            soft_fail: true          
-            format: sarif
-            out: tfsec.sarif
+      - name: Terraform Init
+        run: terraform init
 
-        - name: Upload SARIF
-          uses: github/codeql-action/upload-sarif@v2
-          with:
+      - name: Run tfsec
+        uses: aquasecurity/tfsec-action@v1.0.0
+        with:
+          soft_fail: true
+          format: sarif
+          out: tfsec.sarif
+
+      - name: Upload SARIF
+        uses: github/codeql-action/upload-sarif@v2
+        with:
           sarif_file: tfsec.sarif
 
-    
-        - name: Terraform Apply
-          run: terraform apply -auto-approve
-          env: 
-              TF_VAR_my_ip: ${{ secrets.TF_VAR_MY_IP }}
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan.binary
+        env:
+          TF_VAR_my_ip: ${{ secrets.TF_VAR_MY_IP }}
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        env:
+          TF_VAR_my_ip: ${{ secrets.TF_VAR_MY_IP }}
