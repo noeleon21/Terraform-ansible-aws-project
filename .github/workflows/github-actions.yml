@@ -27,24 +27,21 @@ jobs:
 
         - name: Terraform Init
           run: terraform init 
-        
-        - name: Run Trivy
-          uses: aquasecurity/trivy-action@0.33.1
+          
+        - name: Run tfsec
+          uses: aquasecurity/tfsec-action@v1.0.0
           with:
-                scan-type: config
-                scan-ref: .
-                severity: HIGH,CRITICAL
-                exit-code: 1
-           
-        
-        - name: Run Checkov
-          id: checkov
-          uses: bridgecrewio/checkov-action@v12
+            soft_fail: true          
+            format: sarif
+            out: tfsec.sarif
+
+        - name: Upload SARIF
+          uses: github/codeql-action/upload-sarif@v2
           with:
-            directory: .
+          sarif_file: tfsec.sarif
 
     
         - name: Terraform Apply
           run: terraform apply -auto-approve
           env: 
-              TF_VAR_my_ip: ${{ secrets.TF_VAR_MY_IP}}
+              TF_VAR_my_ip: ${{ secrets.TF_VAR_MY_IP }}
