@@ -67,10 +67,9 @@ variable "my_ip" {
 }
 
 
-
-output "ec2_public_ips" {
-  description = "Public IPs of the EC2 instances"
-  value       = [for instance in module.ec2_instance : instance.public_ip]
+output "ec2_instance_id" {
+  description = "IDs of the EC2 instances"
+  value       = [for instance in module.ec2_instance : instance.id]
 }
 
 resource "aws_iam_role" "ssm_role" {
