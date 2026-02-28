@@ -36,8 +36,11 @@ jobs:
         run: tfsec . --format sarif --out tfsec.sarif
         continue-on-error: true
 
+      - name: Fix SARIF URI scheme
+        run: sed -i 's|git://|file://|g' tfsec.sarif
+
       - name: Upload SARIF
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: tfsec.sarif
 
