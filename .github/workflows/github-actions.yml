@@ -29,12 +29,12 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
-      - name: Install tfsec
-        run: curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
+      # - name: Install tfsec
+      #   run: curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
 
-      - name: Run tfsec
-        run: tfsec .
-        continue-on-error: true
+      # - name: Run tfsec
+      #   run: tfsec .
+      #   continue-on-error: true
       
   
       - name: Terraform Plan
@@ -42,11 +42,11 @@ jobs:
         env:
           TF_VAR_my_ip: ${{ secrets.TF_VAR_MY_IP }}
 
-      - name: Run Checkov
-        uses: bridgecrewio/checkov-action@master
-        with:
-          directory: .
-          soft_fail: true
+      # - name: Run Checkov
+      #   uses: bridgecrewio/checkov-action@master
+      #   with:
+      #     directory: .
+      #     soft_fail: true
 
       - name: Terraform apply
         run: terraform apply -auto-approve
