@@ -48,7 +48,7 @@ jobs:
           directory: .
           soft_fail: true
 
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
+      - name: Terraform destroy
+        run: terraform destroy -auto-approve
         env:
           TF_VAR_my_ip: ${{ secrets.TF_VAR_MY_IP }}
