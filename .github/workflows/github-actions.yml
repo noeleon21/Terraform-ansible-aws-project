@@ -26,8 +26,28 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: us-east-1
 
+<<<<<<< HEAD
+        - name: Terraform Init
+          run: terraform init 
+        
+        - name: Run Trivy
+          uses: aquasecurity/trivy-action@0.34.0
+          with:
+                scan-type: config
+                scan-ref: .
+                severity: HIGH,CRITICAL
+                exit-code: 1
+           
+        
+        - name: Run Checkov
+          id: checkov
+          uses: bridgecrewio/checkov-action@v12
+          with:
+            directory: .
+=======
       - name: Terraform Init
         run: terraform init
+>>>>>>> dev
 
       - name: Install tfsec
         run: curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash

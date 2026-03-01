@@ -20,6 +20,8 @@ This project demonstrates a modern, security-first solution using **Terraform**,
 
 The result is a fully automated, auditable, and least-privilege workflow aligned with zero-trust principles.
 
+![aws_ansible_ssm](https://github.com/user-attachments/assets/164dc5af-c7a5-40c8-852e-548c7cd8b672)
+
 ---
 
 ## 🔍 Problem → Solution Breakdown
