@@ -44,12 +44,12 @@ module "alb" {
         healthy_threshold   = 2
         unhealthy_threshold = 2
       }
-      targets = [
-        for instance in module.ec2_instance : {
+      targets = {
+        for name, instance in module.ec2_instance : name => {
           target_id = instance.id
           port      = 80
         }
-      ]
+      }
     }
   }
 }
