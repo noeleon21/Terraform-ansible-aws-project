@@ -37,6 +37,7 @@ module "alb" {
       protocol    = "HTTP"
       port        = 80
       target_type = "instance"
+      create_attachment = false
       health_check = {
         path                = "/"
         interval            = 30
