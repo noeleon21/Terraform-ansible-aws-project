@@ -44,12 +44,13 @@ module "alb" {
         healthy_threshold   = 2
         unhealthy_threshold = 2
       }
-      targets = {
-        for name, instance in module.ec2_instance : name => {
-          target_id = instance.id
-          port      = 80
-        }
-      }
     }
   }
+}# Attach all EC2 instances to the target group
+resource "aws_lb_target_group_attachment" "instances" {
+  for_each = module.ec2_instance
+
+  target_group_arn = module.alb.target_groups["instances"].arn
+  target_id        = each.value.id
+  port             = 80
 }
