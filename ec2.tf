@@ -1,28 +1,25 @@
 module "ec2_instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
-  
 
   for_each = {
     for idx, name in tolist(["Host", "webserver2", "WebServer3"]) : name => idx
   }
 
-  depends_on = [ module.vpc ]
+  depends_on = [module.vpc]
 
-  name = "instance-${each.key}"
-  ami = "ami-0b09ffb6d8b58ca91"
-  instance_type = "t2.micro"
-  iam_instance_profile = aws_iam_instance_profile.ssm_instance_profile.name
+  name                        = "instance-${each.key}"
+  ami                         = "ami-0b09ffb6d8b58ca91"
+  instance_type               = "t2.micro"
+  iam_instance_profile        = aws_iam_instance_profile.ssm_instance_profile.name
   associate_public_ip_address = true
-  monitoring    = false
-  subnet_id     = module.vpc.public_subnets[each.value]
-  vpc_security_group_ids = [module.alb.security_group_id]
+  monitoring                  = false
+  subnet_id                   = module.vpc.public_subnets[each.value]
+  vpc_security_group_ids      = [module.web_sg.security_group_id]  # ✅ Use web_sg not ALB sg
 
   tags = {
-    Name = "instance-${each.key}"
+    Name  = "instance-${each.key}"
     Stage = "Test"
-   
   }
-  
 }
 
 module "vpc" {
@@ -45,19 +42,26 @@ module "vpc" {
 }
 
 
-# module "web_sg" {
-#   source  = "terraform-aws-modules/security-group/aws"
-#   version = "~> 5.0"
+module "web_sg" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "~> 5.0"
 
-#   name        = "web-sg"
-#   description = "Allow HTTP and HTTPS traffic"
-#   vpc_id      = module.vpc.vpc_id
+  name        = "web-sg"
+  description = "Allow HTTP from ALB only"
+  vpc_id      = module.vpc.vpc_id
 
-#   ingress_rules = ["http-80-tcp", "https-443-tcp"]
-#   ingress_cidr_blocks = [var.my_ip]  
+  ingress_with_source_security_group_id = [
+    {
+      description              = "Allow HTTP from ALB only"
+      from_port                = 80
+      to_port                  = 80
+      protocol                 = "tcp"
+      source_security_group_id = module.alb.security_group_id
+    }
+  ]
 
-#   egress_rules = ["all-all"]
-# }
+  egress_rules = ["all-all"]
+}
 
 variable "my_ip" {
   description = "Your IP address in CIDR notation "
