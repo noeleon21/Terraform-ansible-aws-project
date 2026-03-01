@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on:
   push:
     branches:
-      - dev
+      - main
 permissions:
   id-token: write
   contents: read
@@ -26,28 +26,8 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: us-east-1
 
-<<<<<<< HEAD
-        - name: Terraform Init
-          run: terraform init 
-        
-        - name: Run Trivy
-          uses: aquasecurity/trivy-action@0.34.0
-          with:
-                scan-type: config
-                scan-ref: .
-                severity: HIGH,CRITICAL
-                exit-code: 1
-           
-        
-        - name: Run Checkov
-          id: checkov
-          uses: bridgecrewio/checkov-action@v12
-          with:
-            directory: .
-=======
       - name: Terraform Init
         run: terraform init
->>>>>>> dev
 
       - name: Install tfsec
         run: curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
@@ -68,7 +48,7 @@ jobs:
           directory: .
           soft_fail: true
 
-      - name: Terraform destroy
-        run: terraform destroy -auto-approve
+      - name: Terraform apply
+        run: terraform apply -auto-approve
         env:
           TF_VAR_my_ip: ${{ secrets.TF_VAR_MY_IP }}

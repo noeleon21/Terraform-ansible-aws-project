@@ -15,7 +15,7 @@ module "ec2_instance" {
   associate_public_ip_address = true
   monitoring    = false
   subnet_id     = module.vpc.public_subnets[each.value]
-  vpc_security_group_ids = [module.web_sg.security_group_id]
+  vpc_security_group_ids = [module.alb.security_group_id]
 
   tags = {
     Name = "instance-${each.key}"
@@ -45,19 +45,19 @@ module "vpc" {
 }
 
 
-module "web_sg" {
-  source  = "terraform-aws-modules/security-group/aws"
-  version = "~> 5.0"
+# module "web_sg" {
+#   source  = "terraform-aws-modules/security-group/aws"
+#   version = "~> 5.0"
 
-  name        = "web-sg"
-  description = "Allow HTTP and HTTPS traffic"
-  vpc_id      = module.vpc.vpc_id
+#   name        = "web-sg"
+#   description = "Allow HTTP and HTTPS traffic"
+#   vpc_id      = module.vpc.vpc_id
 
-  ingress_rules = ["http-80-tcp", "https-443-tcp"]
-  ingress_cidr_blocks = [var.my_ip]  
+#   ingress_rules = ["http-80-tcp", "https-443-tcp"]
+#   ingress_cidr_blocks = [var.my_ip]  
 
-  egress_rules = ["all-all"]
-}
+#   egress_rules = ["all-all"]
+# }
 
 variable "my_ip" {
   description = "Your IP address in CIDR notation "
