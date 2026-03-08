@@ -3,6 +3,7 @@ module "alb" {
   name    = "my-alb234432"
   vpc_id  = module.vpc.vpc_id
   subnets = module.vpc.public_subnets
+  enable_deletion_protection = false
 
   security_group_ingress_rules = {
     http_from_cloudfront = {
